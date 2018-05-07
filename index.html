@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+<title>Interactive API Client</title>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
+<script src="controller.js"></script>
+</head>
+<body ng-controller="controller_1">
+<p>Welcome to Interactive API Client of RESTful API</p>
+<script>
+    if ($.cookie('login')=="non") {
+        document.write("<a href='reg.html'>Registration</a> / <a href='login.html'>Login</a>");
+    } else {
+        document.write("Welcome, " + $.cookie('login') + ", <a href='fav.html'>Favourites list</a>");
+        document.write("</br></br><button onclick='logout()'>Logout</button>");
+    }
+    
+    function logout(){
+        $.cookie('login', 'non', '/');
+        location.reload();
+    }
+</script>
+</br></br></br>
+<p>Search for picture information by ID: <input type="text" id="searchID" ng-model="pa.id"></p>
+<button class="search">Search</button>
+<p id="result"></p>
+<script>
+$(".search").click(function() {
+    $u = 'https://restfulapi-fong19951217.c9users.io/pictureinfo?id=' + $('#searchID').val();
+    $.ajax({
+        url: $u,
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            console.log(response)
+            var $html = "";
+            try {
+            $.each(response.picture, function( index, value ) {
+                
+                $html += '<h1>Picture ' + index + '</h1>';
+                $html += '<ul>';
+                $html += '<li>width : ' + value.width + '</li>';
+                $html += '<li>height : ' + value.height + '</li>';
+                $html += '<li>is_silhouette : ' + value.is_silhouette + '</li>';
+                $html += '<li>url : ' + value.url + '</li>';
+                $html += '</ul>';
+                $html += '<img src="' + value.url + '" width="200" height="200">';
+                
+                
+                if($.cookie('login')!="non") {
+                    $html += '</br><a href="add.html?id=' + $('#searchID').val() + '">Add to favourites list</a>';
+                }
+            });
+            } catch (err){
+                    $html += 'No results!';
+                }
+            $('#result').html($html)
+        },
+        error: function(xhr) {
+        }
+    });
+});
+</script>
+</body>
+</html>
