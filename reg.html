@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+<title>Interactive API Client</title>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
+<script src="controller.js"></script>
+<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init("user_qTG9rTTj4lA69K0MjknpB");
+   })();
+</script>
+</head>
+<body ng-controller="controller_1">
+<script>
+function sendMail() {
+    var rt = $('#email').val();
+    var tn = $('#name').val();
+    var clink = "<a href='https://apiclient-fong19951217.c9users.io/c.html?n=" + tn + "&p=" + $('#password').val() + "&e=" + rt + "'>Click Here</a>";
+    emailjs.send("yahoo", "template_wRQa7ypw", {"reply_to":rt,"from_name":"API Client","to_name":tn,"message_html":clink});
+    alert("Please check your email to confrim!");
+}
+</script>
+    <p>Registration</p></br>
+    Name: </br><input id="name" type="text" ng-model="pa.name"></br>
+    Password: </br><input id="password" type="password" ng-model="pa.password"></br>
+    Email: </br><input id="email" type="text" ng-model="pa.email"></br></br>
+    <button class="register" onclick="sendMail()">Register</button>
+    </br></br> <a href="index.html">Back to homepage</a>
+</body>
+</html>

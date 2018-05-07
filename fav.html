@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+<title>Interactive API Client</title>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
+<script src="controller.js"></script>
+</head>
+<body ng-controller="controller_1">
+<script>
+    document.write("Welcome, " + $.cookie('login'));
+    document.write("</br></br>This is your favourites list.");
+    document.write("</br></br><a href='index.html'>Back to homepage</a>");
+    
+    $u = 'https://restfulapi-fong19951217.c9users.io/pictureinfo';
+    $.ajax({
+        url: $u,
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            console.log(response)
+            var $html = "";
+            $.each(response, function( index, value ) {
+                try {
+                $html += '<h1>Picture ID: ' + index + '</h1>';
+                $html += '<ul>';
+                $html += '<li>width : ' + value.picture.data.width + '</li>';
+                $html += '<li>height : ' + value.picture.data.height + '</li>';
+                $html += '<li>is_silhouette : ' + value.picture.data.is_silhouette + '</li>';
+                $html += '<li>url : ' + value.picture.data.url + '</li>';
+                $html += '</ul>';
+                $html += '<img src="' + value.picture.data.url + '" width="200" height="200">';
+                $html += '</br><a href="edit.html?id=' + value.id + '">Edit</a>';
+                $html += '</br><a href="delete.html?id=' + value.id + '">Delete</a>';
+                } catch (err) {
+                    $html += '</ul>';
+                    $html += '<li>data :' + value + '</li>';
+                    $html += '</br><a href="edit.html?id=' + index + '">Edit</a>';
+                    $html += '</br><a href="delete.html?id=' + index + '">Delete</a>';
+                }
+            });
+            $('#result').html($html)
+        },
+        error: function(xhr) {
+        }
+    });
+</script>
+<p id="result"></p>
+</body>
+</html>
